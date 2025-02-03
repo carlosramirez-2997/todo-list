@@ -1,14 +1,23 @@
 const { validationResult } = require('express-validator');
 
-const Task = require('../models/Task');
+const Task = require('../models/task');
 
-// Get all tasks0
 exports.getTasks = async (req, res) => {
-  const tasks = await Task.find();
-  res.status(200).json(tasks);
+  const tasks = await Task.find({ user: req.session.user._id });
+
+  const events = tasks.map(task => ({
+    title: task.title,
+    start: task.start,
+    end: task.end
+  }));
+
+  res.render('./task/index', {
+    pageTitle: 'Home',
+    path: '/index',
+    events: JSON.stringify(events)
+  });
 };
 
-// Create a new task
 exports.createTask = async (req, res) => {
   const errors = validationResult(req);
 
@@ -21,13 +30,11 @@ exports.createTask = async (req, res) => {
   res.status(201).json(newTask);
 };
 
-// Update a task
 exports.updateTask = async (req, res) => {
   const updatedTask = await Task.findByIdAndUpdate(req.params.id, req.body, { new: true });
   res.status(200).json(updatedTask);
 };
 
-// Delete a task
 exports.deleteTask = async (req, res) => {
   await Task.findByIdAndDelete(req.params.id);
   res.status(204).send();

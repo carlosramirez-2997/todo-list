@@ -1,6 +1,6 @@
 const express = require('express');
 const { body } = require('express-validator');
-const taskController = require('../controllers/taskController');
+const taskController = require('../controllers/task');
 const router = express.Router();
 
 router.get('/', taskController.getTasks);
