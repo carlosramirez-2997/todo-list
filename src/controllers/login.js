@@ -5,7 +5,7 @@ const User = require('../models/user');
 exports.postLogin = (req, res, next) => {
     const { email, password } = req.body;
 
-    console.log('User to be authenticated: ', email, password);
+    console.log('User to be authenticated: ', email);
 
     User.findOne({ email: email })
         .then(user => {
@@ -36,14 +36,15 @@ exports.getLogin = (req, res, next) => {
     });
 }
 
-exports.postLogout = (req, res, next) => {
-    req.session.destroy(err => {
-        console.log(err);
-        res.clearCookie("connect.sid");
+exports.getLogout = (req, res, next) => {
+    req.session.destroy((err) => {
+        if (!err) {
+            res.clearCookie('connect.sid');
+        }
         res.redirect('/login');
     });
 }
 
 exports.getIndex = (req, res, next) => {
-    
+    res.redirect('/login');
 };

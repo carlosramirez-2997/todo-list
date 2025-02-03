@@ -22,12 +22,16 @@ exports.createTask = async (req, res) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
+    console.log('Validation errors:', errors.array());
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const newTask = new Task(req.body);
-  await newTask.save();
-  res.status(201).json(newTask);
+  Task.create({ ...req.body, user: req.session.user._id }).then((task, err) => {
+    if (err) {
+      console.error('Error creating task:', err);
+    }
+    res.redirect('/tasks');
+  });
 };
 
 exports.updateTask = async (req, res) => {

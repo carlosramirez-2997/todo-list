@@ -2,6 +2,7 @@ require('dotenv').config();
 
 const path = require('path');
 
+const csrf = require('csurf');
 const express = require('express');
 const session = require('express-session');
 
@@ -14,6 +15,8 @@ const taskRoutes = require('./routes/task');
 const errorHandler = require('./middlewares/errorHandler');
 
 const app = express();
+
+const csrfProtection = csrf();
 
 app.set('view engine', 'ejs');
 app.set('views', 'src/views');
@@ -34,39 +37,41 @@ app.use(session({
     }
 }));
 
+app.use(csrfProtection);
 
-app.use(loginRoutes)
-app.use('/tasks', taskRoutes);
-app.use(errorHandler.get404);
-
-
-app.use((req, res, next) => {
-    if (!req.session.user) {
-        return next();
-    }
-    redisClient.get(`sess:${req.sessionID}`, async (err, sessionData) => {
-        if (err) {
-            return next(err);
-        }
-        if (!sessionData) {
-            req.session.destroy(err => {
-                if (err) {
-                    return next(err);
-                }
-                res.clearCookie("connect.sid");
-                res.redirect('/login');
-            });
-            return;
-        }
-        next();
-    });
-});
-  
 app.use((req, res, next) => {
     res.locals.isAuthenticated = req.session.isLoggedIn;
     res.locals.csrfToken = req.csrfToken();
     next();
+  });
+
+app.use(loginRoutes)
+
+app.use(async (req, res, next) => {
+    if (!req.sessionID) {
+        return res.redirect('/login');
+    }
+
+    redisClient.get(`sess:${req.sessionID}`).then(sessionData => {
+        if (!sessionData) {
+            req.session.destroy((err) => {
+                if (err) {
+                    console.error("Error destroying session:", err);
+                    return next(err);
+                }
+                res.clearCookie("connect.sid");
+                return res.redirect('/login');
+            });
+            return;
+        }
+
+        next();
+    });
 });
+
+app.use('/tasks', taskRoutes);
+
+app.use(errorHandler.get404);
 
 const PORT = process.env.PORT || 3000;
 

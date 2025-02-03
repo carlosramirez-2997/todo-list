@@ -7,8 +7,9 @@ router.get('/', taskController.getTasks);
 
 router.post('/', [
     body('title').isLength({ min: 1, max: 20 }).withMessage('Title is required'),
-    body('completed').isBoolean(),
-    body('createdAt').optional().isISO8601().withMessage('Invalid date format. Use ISO 8601.'),
+    body('completed').optional().isBoolean(),
+    body('start').optional().isISO8601().withMessage('Invalid date format. Use ISO 8601.'),
+    body('end').optional().isISO8601().withMessage('Invalid date format. Use ISO 8601.'),
 ], taskController.createTask);
 
 router.put('/:id', taskController.updateTask);
