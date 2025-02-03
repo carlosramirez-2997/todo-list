@@ -3,3 +3,4 @@ docker run -d --name mongodb -p 27017:27017 \
 	-e MONGO_INITDB_ROOT_PASSWORD=secret \
     mongo
 
+docker run --name redis -d -p 6379:6379 redis:7.4.2-alpine
