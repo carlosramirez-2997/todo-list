@@ -1,0 +1,55 @@
+<%- include('../includes/head.ejs') %>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 50vh;
+        }
+        .container {
+            max-width: 800px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #007bff;
+        }
+        p {
+            line-height: 1.6;
+        }
+        .features {
+            text-align: left;
+            margin-top: 20px;
+        }
+        .features ul {
+            list-style-type: square;
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<%- include('../includes/navigation.ejs') %>
+<body>
+    <div class="container">
+        <h1>About To-Do App</h1>
+        <p>Welcome to the To-Do App, a simple and efficient way to manage your daily tasks.</p>
+        <div class="features">
+            <h2>Key Features</h2>
+            <ul>
+                <li>Add, edit, and delete tasks easily</li>
+                <li>Mark tasks as completed</li>
+                <li>Organize tasks with categories</li>
+                <li>Responsive design for mobile and desktop</li>
+                <li>Simple and user-friendly interface</li>
+            </ul>
+        </div>
+        <p>Our goal is to help you stay organized and productive. Start using To-Do App today!</p>
+    </div>
+<%- include('../includes/end.ejs') %>

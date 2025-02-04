@@ -5,6 +5,7 @@ const path = require('path');
 const csrf = require('csurf');
 const express = require('express');
 const session = require('express-session');
+const flash = require('connect-flash');
 
 const RedisStore = require('connect-redis').default;
 const { redisClient, connectRedis } = require('./config/redis');
@@ -38,6 +39,7 @@ app.use(session({
 }));
 
 app.use(csrfProtection);
+app.use(flash());
 
 app.use((req, res, next) => {
     res.locals.isAuthenticated = req.session.isLoggedIn;

@@ -1,0 +1,83 @@
+<%- include('../includes/head.ejs') %>
+</head>
+<body>
+    <% if (errorMessage) { %>
+    <div id="alertError" class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+        <span class="font-medium">Alert!</span> <%= errorMessage %>
+    </div>
+
+    <script>
+        let alertBox = document.getElementById("alertError");
+        setTimeout(() => {
+            alertBox.classList.add("hidden");
+        }, 5000);
+    </script>
+    <% } %>
+    <div class="min-h-screen flex items-center justify-center">
+        <div class="bg-white shadow-lg rounded-2xl p-8 w-full max-w-md">
+            <div class="text-center">
+                <h1 class="text-2xl font-bold text-gray-800">Register your Account!</h1>
+            </div>
+
+            <form id="signupForm" action="/signup" method="POST" class="mt-6 space-y-6">
+                <!-- Email -->
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" id="email" name="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="john.doe@company.com" required />
+                </div>
+
+                <!-- Password -->
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                    <input type="password" id="password" name="password" minlength="5" maxlength="15" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="•••••••••" required />
+                </div>
+
+                <!-- Confirm Password -->
+                <div>
+                    <label for="confirm-password" class="block text-sm font-medium text-gray-700">Confirm Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" minlength="5" maxlength="15" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="•••••••••" required />
+                </div>
+
+                <div id="errorAlert" class="hidden p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                    <span class="font-medium">Alert!</span> Passwords do not match!
+                </div>
+
+                <!-- Submit Button -->
+                <div>
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <button type="submit"
+                        class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                        Sign Up
+                    </button>
+                </div>
+            </form>
+
+            <script>
+                document.getElementById("signupForm").addEventListener("submit", function(event) {
+                    let password = document.getElementById("password").value;
+                    let confirmPassword = document.getElementById("confirmPassword").value;
+                    let errorAlert = document.getElementById("errorAlert");
+        
+                    if (password !== confirmPassword) {
+                        errorAlert.classList.add("hidden");
+                        event.preventDefault();
+                    } else {
+                        errorAlert.classList.remove("hidden");
+                    }
+                });
+
+                document.getElementById("confirmPassword").addEventListener("input", function() {
+                    let password = document.getElementById("password").value;
+                    let confirmPassword = this.value;
+                    let errorAlert = document.getElementById("errorAlert");
+
+                    if (password !== confirmPassword) {
+                        errorAlert.classList.remove("hidden");
+                    } else {
+                        errorAlert.classList.add("hidden");
+                    }
+                });
+            </script>
+        </div>
+    </div>
+<%- include('../includes/end.ejs') %>
