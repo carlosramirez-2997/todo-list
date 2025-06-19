@@ -1,11 +1,11 @@
 pipeline {
     agent {
         docker {
-            image 'node:20-alpine'
+            image 'node:24-alpine'
         }
     }
     tools {
-        nodejs 'Node 20'
+        nodejs 'Node 24'
     }
     stages {
         stage('Install') {
@@ -20,7 +20,7 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh 'npm run start-server'
+                sh 'npm run build'
             }
         }
     }
