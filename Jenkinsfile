@@ -1,11 +1,6 @@
 pipeline {
-    agent {
-        docker {
-            image 'node:24-alpine'
-        }
-    }
     tools {
-        nodejs 'Node 24'
+        nodejs 'Node'
     }
     stages {
         stage('Install') {
